@@ -1,5 +1,18 @@
 <script setup lang="ts">
+import { getArticlesAPI } from '~/api/article'
 
+// 文章列表
+const list = ref<any[]>([])
+
+// 组件挂载时发送请求
+onMounted(async () => {
+  const res = await getArticlesAPI({
+    current: 1,
+    sorter: 'weight_desc',
+    pageSize: 10,
+  })
+  list.value = res.data.rows
+})
 </script>
 
 <template>
@@ -11,7 +24,7 @@
         <div class="logo"><img src="~/assets/logo.png" alt="" /></div>
       </nav>
       <!-- 文章项组件 - 自动导入 -->
-      <ArticleItem />
+      <ArticleItem v-for="item in list" :key="item.id" :item="item" />
     </div>
   </NuxtLayout>
 </template>

@@ -1,27 +1,23 @@
 <script setup lang="ts">
-
+defineProps<{
+  item: any
+}>()
 </script>
 
 <template>
-  <van-cell class="article-item">
+  <van-cell class="article-item" @click="$router.push(`/detail/${item.id}`)">
     <template #title>
       <div class="head">
-        <img
-          src="http://teachoss.itheima.net/heimaQuestionMiniapp/%E5%AE%98%E6%96%B9%E9%BB%98%E8%AE%A4%E5%A4%B4%E5%83%8F%402x.png"
-          alt=""
-        />
+        <img :src="item.avatar" alt="" />
         <div class="con">
-          <p class="title van-ellipsis">宇宙头条校招前端面经</p>
-          <p class="other">不风流怎样倜傥 | 2022-01-20 00-00-00</p>
+          <p class="title van-ellipsis">{{ item.stem }}</p>
+          <p class="other">{{ item.creator }} | {{ item.createdAt }}</p>
         </div>
       </div>
     </template>
     <template #label>
-      <div class="body van-multi-ellipsis--l2">
-        笔者读大三, 前端小白一枚, 正在准备春招, 人生第一次面试, 投了头条前端,
-        总共经历了四轮技术面试和一轮hr面, 不多说, 直接上题&nbsp;一面
-      </div>
-      <div class="foot">点赞 46 | 浏览 332</div>
+      <div class="body van-multi-ellipsis--l2" v-html="item.content"></div>
+      <div class="foot">点赞 {{ item.likeCount }} | 浏览 {{ item.views }}</div>
     </template>
   </van-cell>
 </template>

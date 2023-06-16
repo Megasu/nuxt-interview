@@ -11,6 +11,10 @@ const request = axios.create({
 request.interceptors.request.use(
   function (config) {
     // 在发送请求之前做些什么
+    const token = getToken()
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`
+    }
     return config
   },
   function (error) {
@@ -26,8 +30,11 @@ request.interceptors.response.use(
     return response.data
   },
   function (error) {
-    if (error.response) {
-      // 有错误响应, 提示错误提示
+    // 有错误响应, 提示错误提示
+    if (error.response.status === 401) {
+      delToken()
+      navigateTo('/login')
+    } else {
       showFailToast(error.response.data.message)
     }
     // 对响应错误做点什么
