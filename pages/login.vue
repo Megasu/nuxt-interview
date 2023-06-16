@@ -1,9 +1,18 @@
 <script setup lang="ts">
-const username = ref('itheima')
-const password = ref('123456')
+import { loginAPI } from '../api/user'
 
-const onSubmit = (values: any) => {
-  console.log('submit', values)
+// 表单数据
+const form = reactive({
+  username: 'itheima',
+  password: '123456',
+})
+
+// 表单提交
+const onSubmit = async () => {
+  const { data } = await loginAPI(form)
+  showSuccessToast('登录成功')
+  localStorage.setItem('token', data.token)
+  navigateTo('/')
 }
 </script>
 
@@ -19,7 +28,7 @@ const onSubmit = (values: any) => {
       <!-- 输入框组件 -->
       <!-- \w 字母数字_   \d 数字0-9 -->
       <van-field
-        v-model="username"
+        v-model="form.username"
         name="username"
         label="用户名"
         placeholder="用户名"
@@ -29,7 +38,7 @@ const onSubmit = (values: any) => {
         ]"
       />
       <van-field
-        v-model="password"
+        v-model="form.password"
         type="password"
         name="password"
         label="密码"

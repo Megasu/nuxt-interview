@@ -4,3 +4,8 @@ import request from '../utils/request'
 export const registerAPI = (data: object) => {
   return request.post('/user/register', data)
 }
+
+// 登录接口
+export const loginAPI = (data: object) => {
+  return request.post('/user/login', data)
+}
