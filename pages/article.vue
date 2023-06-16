@@ -1,11 +1,3 @@
-<script setup lang="ts">
-
-</script>
-
 <template>
-  <h1>article</h1>
+  <van-button type="primary">按钮</van-button>
 </template>
-
-<style scoped>
-
-</style>
