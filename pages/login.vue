@@ -11,7 +11,7 @@ const form = reactive({
 const onSubmit = async () => {
   const { data } = await loginAPI(form)
   showSuccessToast('登录成功')
-  localStorage.setItem('token', data.token)
+  setToken(data.token)
   navigateTo('/')
 }
 </script>
