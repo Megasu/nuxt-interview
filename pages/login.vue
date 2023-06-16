@@ -43,7 +43,15 @@ const onSubmit = (values: any) => {
         <van-button block type="primary" native-type="submit">提交</van-button>
       </div>
     </van-form>
+    <NuxtLink class="link" to="/register">注册账号</NuxtLink>
   </div>
 </template>
 
-<style scoped></style>
+<style scoped>
+.link {
+  color: #069;
+  font-size: 12px;
+  padding-right: 20px;
+  float: right;
+}
+</style>
