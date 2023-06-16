@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { registerAPI } from '../api/user'
 // 表单数据
 const form = reactive({
   username: 'itheima',
@@ -12,23 +13,10 @@ const onSubmit = async (values: typeof form) => {
     message: '拼命加载中...',
     forbidClick: true,
   })
-  // 往后台发送注册请求了
-  const { data, error } = await useFetch(
-    'http://interview-api-t.itheima.net/h5/user/register',
-    {
-      method: 'POST',
-      body: values,
-    },
-  )
-  // 成功逻辑
-  if (data.value) {
-    showSuccessToast('注册成功')
-    navigateTo('/login')
-  }
-  // 失败逻辑
-  if (error.value) {
-    showFailToast(error.value.data.message)
-  }
+
+  await registerAPI(values)
+  showSuccessToast('注册成功')
+  navigateTo('/login')
 }
 </script>
 
