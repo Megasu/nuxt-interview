@@ -3,7 +3,9 @@
 </script>
 
 <template>
-  <h1>user</h1>
+  <NuxtLayout name="tabbar">
+    <h1>user</h1>
+  </NuxtLayout>
 </template>
 
 <style scoped>

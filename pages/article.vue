@@ -1,3 +1,5 @@
 <template>
-  <van-button type="primary">按钮</van-button>
+  <NuxtLayout name="tabbar">
+    <h1>article</h1>
+  </NuxtLayout>
 </template>
