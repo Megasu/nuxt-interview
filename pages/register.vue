@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { registerAPI } from '../api/user'
+import { registerAPI } from '~/api/user'
+
 // 表单数据
 const form = reactive({
   username: 'itheima',

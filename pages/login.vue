@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { loginAPI } from '../api/user'
+import { loginAPI } from '~/api/user'
 
 // 表单数据
 const form = reactive({
