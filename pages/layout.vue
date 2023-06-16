@@ -2,8 +2,8 @@
 
 </script>
 
-<template>  
-  <h1>关于</h1>
+<template>
+  <h1>layout</h1>
 </template>
 
 <style scoped>

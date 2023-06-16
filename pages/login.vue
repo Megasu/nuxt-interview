@@ -3,7 +3,7 @@
 </script>
 
 <template>
-  <h1>主页</h1>
+  <h1>login</h1>
 </template>
 
 <style scoped>
