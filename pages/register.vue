@@ -5,19 +5,30 @@ const form = reactive({
   password: '123456',
 })
 
-// 注册接口
-const registerAPI = async (data: typeof form) => {
-  return await useFetch('http://interview-api-t.itheima.net/h5/user/register', {
-    method: 'POST',
-    body: data,
-  })
-}
-
+// 点击提交
 const onSubmit = async (values: typeof form) => {
+  // 加载提示
+  showLoadingToast({
+    message: '拼命加载中...',
+    forbidClick: true,
+  })
   // 往后台发送注册请求了
-  await registerAPI(values)
-  alert('注册成功')
-  navigateTo('/login')
+  const { data, error } = await useFetch(
+    'http://interview-api-t.itheima.net/h5/user/register',
+    {
+      method: 'POST',
+      body: values,
+    },
+  )
+  // 成功逻辑
+  if (data.value) {
+    showSuccessToast('注册成功')
+    navigateTo('/login')
+  }
+  // 失败逻辑
+  if (error.value) {
+    showFailToast('注册失败')
+  }
 }
 </script>
 
