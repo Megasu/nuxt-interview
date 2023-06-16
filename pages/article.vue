@@ -1,20 +1,39 @@
 <script setup lang="ts">
 const token = getToken()
+
+// 查询参数
+const params = {
+  current: 1,
+  sorter: 'weight_desc',
+  pageSize: 10,
+}
+
+const list = ref<any[]>([])
+const loading = ref(false)
+const finished = ref(false)
+
 // 服务端直接获取数据
-const { data } = await useFetch<any>(
-  'http://interview-api-t.itheima.net/h5/interview/query',
-  {
-    params: {
-      current: 1,
-      sorter: 'weight_desc',
-      pageSize: 10,
+const onLoad = async () => {
+  const { data } = await useFetch<any>(
+    'http://interview-api-t.itheima.net/h5/interview/query',
+    {
+      params,
+      headers: {
+        // 注意 Bearer 和 后面的空格不能删除，为后台的token辨识
+        Authorization: `Bearer ${token}`,
+      },
     },
-    headers: {
-      // 注意 Bearer 和 后面的空格不能删除，为后台的token辨识
-      Authorization: `Bearer ${token}`,
-    },
-  },
-)
+  )
+  // 数组追加
+  list.value.push(...data.value.data.rows)
+  loading.value = false
+  params.current++
+  if (params.current > data.value.data.pageTotal) {
+    finished.value = true
+  }
+}
+
+onLoad()
 </script>
 
 <template>
@@ -25,8 +44,15 @@ const { data } = await useFetch<any>(
         <a href="javascript:;">最新</a>
         <div class="logo"><img src="~/assets/logo.png" alt="" /></div>
       </nav>
-      <!-- 文章项组件 - 自动导入 -->
-      <ArticleItem v-for="item in data.data.rows" :key="item.id" :item="item" />
+      <van-list
+        v-model="loading"
+        :finished="finished"
+        finished-text="没有更多了"
+        @load="onLoad"
+      >
+        <!-- 文章项组件 - 自动导入 -->
+        <ArticleItem v-for="item in list" :key="item.id" :item="item" />
+      </van-list>
     </div>
   </NuxtLayout>
 </template>
