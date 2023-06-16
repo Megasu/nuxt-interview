@@ -27,7 +27,7 @@ const onSubmit = async (values: typeof form) => {
   }
   // 失败逻辑
   if (error.value) {
-    showFailToast('注册失败')
+    showFailToast(error.value.data.message)
   }
 }
 </script>
