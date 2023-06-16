@@ -1,18 +1,20 @@
 <script setup lang="ts">
-import { getArticlesAPI } from '~/api/article'
-
-// 文章列表
-const list = ref<any[]>([])
-
-// 组件挂载时发送请求
-onMounted(async () => {
-  const res = await getArticlesAPI({
-    current: 1,
-    sorter: 'weight_desc',
-    pageSize: 10,
-  })
-  list.value = res.data.rows
-})
+const token = getToken()
+// 服务端直接获取数据
+const { data } = await useFetch<any>(
+  'http://interview-api-t.itheima.net/h5/interview/query',
+  {
+    params: {
+      current: 1,
+      sorter: 'weight_desc',
+      pageSize: 10,
+    },
+    headers: {
+      // 注意 Bearer 和 后面的空格不能删除，为后台的token辨识
+      Authorization: `Bearer ${token}`,
+    },
+  },
+)
 </script>
 
 <template>
@@ -24,7 +26,7 @@ onMounted(async () => {
         <div class="logo"><img src="~/assets/logo.png" alt="" /></div>
       </nav>
       <!-- 文章项组件 - 自动导入 -->
-      <ArticleItem v-for="item in list" :key="item.id" :item="item" />
+      <ArticleItem v-for="item in data.data.rows" :key="item.id" :item="item" />
     </div>
   </NuxtLayout>
 </template>
