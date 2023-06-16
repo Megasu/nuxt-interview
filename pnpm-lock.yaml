@@ -13,6 +13,9 @@ devDependencies:
   nuxt:
     specifier: ^3.5.2
     version: 3.5.2(@types/node@18.0.0)
+  postcss-px-to-viewport:
+    specifier: ^1.1.1
+    version: 1.1.1
   vant:
     specifier: ^4.5.0
     version: 4.5.0(vue@3.3.4)
@@ -4947,6 +4950,13 @@ packages:
       cssnano-utils: 4.0.0(postcss@8.4.24)
       postcss: 8.4.24
       postcss-value-parser: 4.2.0
+    dev: true
+
+  /postcss-px-to-viewport@1.1.1:
+    resolution: {integrity: sha512-2x9oGnBms+e0cYtBJOZdlwrFg/mLR4P1g2IFu7jYKvnqnH/HLhoKyareW2Q/x4sg0BgklHlP1qeWo2oCyPm8FQ==}
+    dependencies:
+      object-assign: 4.1.1
+      postcss: 8.4.24
     dev: true
 
   /postcss-reduce-initial@6.0.0(postcss@8.4.24):
