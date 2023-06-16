@@ -1,13 +1,72 @@
 <script setup lang="ts">
+const username = ref()
+const avatar = ref()
 
+const { data } = await useFetch<any>(
+  'http://interview-api-t.itheima.net/h5/user/currentUser',
+  {
+    headers: {
+      // 注意 Bearer 和 后面的空格不能删除，为后台的token辨识
+      Authorization: `Bearer ${getToken()}`,
+    },
+  },
+)
+
+username.value = data.value.data.username
+avatar.value = data.value.data.avatar
+
+const logout = () => {
+  delToken()
+  navigateTo('/login')
+}
 </script>
 
 <template>
   <NuxtLayout name="tabbar">
-    <h1>user</h1>
+    <div class="user-page">
+      <div class="user">
+        <img :src="avatar" alt="" />
+        <h3>{{ username }}</h3>
+      </div>
+      <van-grid clickable :column-num="3" :border="false">
+        <van-grid-item icon="clock-o" text="历史记录" to="/" />
+        <van-grid-item icon="bookmark-o" text="我的收藏" to="/collect" />
+        <van-grid-item icon="thumb-circle-o" text="我的点赞" to="/like" />
+      </van-grid>
+
+      <van-cell-group class="mt20">
+        <van-cell title="推荐分享" is-link />
+        <van-cell title="意见反馈" is-link />
+        <van-cell title="关于我们" is-link />
+        <van-cell @click="logout" title="退出登录" is-link />
+      </van-cell-group>
+    </div>
   </NuxtLayout>
 </template>
 
-<style scoped>
-
+<style lang="less" scoped>
+.user-page {
+  padding: 0 10px;
+  background: #f5f5f5;
+  height: 100vh;
+  .mt20 {
+    margin-top: 20px;
+  }
+  .user {
+    display: flex;
+    padding: 20px 0;
+    align-items: center;
+    img {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      overflow: hidden;
+    }
+    h3 {
+      margin: 0;
+      padding-left: 20px;
+      font-size: 18px;
+    }
+  }
+}
 </style>

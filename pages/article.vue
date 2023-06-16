@@ -1,6 +1,4 @@
 <script setup lang="ts">
-const token = getToken()
-
 // 查询参数
 const params = {
   current: 1,
@@ -20,7 +18,7 @@ const onLoad = async () => {
       params,
       headers: {
         // 注意 Bearer 和 后面的空格不能删除，为后台的token辨识
-        Authorization: `Bearer ${token}`,
+        Authorization: `Bearer ${getToken()}`,
       },
     },
   )
