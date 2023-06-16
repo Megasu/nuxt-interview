@@ -1,9 +1,23 @@
 <script setup lang="ts">
-const username = ref('itheima')
-const password = ref('123456')
+// 表单数据
+const form = reactive({
+  username: 'itheima',
+  password: '123456',
+})
 
-const onSubmit = (values: any) => {
-  console.log('submit', values)
+// 注册接口
+const registerAPI = async (data: typeof form) => {
+  return await useFetch('http://interview-api-t.itheima.net/h5/user/register', {
+    method: 'POST',
+    body: data,
+  })
+}
+
+const onSubmit = async (values: typeof form) => {
+  // 往后台发送注册请求了
+  await registerAPI(values)
+  alert('注册成功')
+  navigateTo('/login')
 }
 </script>
 
@@ -13,7 +27,7 @@ const onSubmit = (values: any) => {
 
     <van-form @submit="onSubmit">
       <van-field
-        v-model="username"
+        v-model="form.username"
         name="username"
         label="用户名"
         placeholder="用户名"
@@ -23,7 +37,7 @@ const onSubmit = (values: any) => {
         ]"
       />
       <van-field
-        v-model="password"
+        v-model="form.password"
         type="password"
         name="password"
         label="密码"
