@@ -1,5 +1,21 @@
 <script setup lang="ts">
+const token = getToken()
 
+const { data } = await useFetch<any>(
+  'http://interview-api-t.itheima.net/h5/interview/show',
+  {
+    params: {
+      id: useRoute().params.id,
+    },
+    headers: {
+      // 注意 Bearer 和 后面的空格不能删除，为后台的token辨识
+      Authorization: `Bearer ${token}`,
+    },
+  },
+)
+
+const article = ref<any>()
+article.value = data.value.data
 </script>
 
 <template>
@@ -8,25 +24,23 @@
       left-text="返回"
       @click-left="$router.back()"
       fixed
-      title="面经详情"
+      title="面经详细"
     />
     <header class="header">
-      <h1>大标题</h1>
-      <p> 2050-04-06 | 300 浏览量 | 222 点赞数 </p>
+      <h1>{{ article.stem }}</h1>
       <p>
-        <img src="头像" alt="" />
-        <span>作者</span>
+        {{ article.createdAt }} | {{ article.views }} 浏览量 |
+        {{ article.likeCount }} 点赞数
+      </p>
+      <p>
+        <img :src="article.avatar" alt="" />
+        <span>{{ article.creator }}</span>
       </p>
     </header>
-    <main class="body">
-      <p>我是内容</p>
-      <p>我是内容</p>
-      <p>我是内容</p>
-      <p>我是内容</p>
-    </main>
+    <main class="body" v-html="article.content"></main>
     <div class="opt">
-      <van-icon class="active" name="like-o" />
-      <van-icon name="star-o" />
+      <van-icon :class="{ active: article.likeFlag }" name="like-o" />
+      <van-icon :class="{ active: article.collectFlag }" name="star-o" />
     </div>
   </div>
 </template>
