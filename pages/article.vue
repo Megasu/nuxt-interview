@@ -1,36 +1,34 @@
 <script setup lang="ts">
 // 查询参数
 const params = {
-  current: 1,
-  sorter: 'weight_desc',
-  pageSize: 10,
+  current: 1, // 当前页码
+  sorter: 'weight_desc', // 排序方式
+  pageSize: 10, // 页容量
 }
 
+// 文章列表
 const list = ref<any[]>([])
+// 加载中标识、已完成标识
 const loading = ref(false)
 const finished = ref(false)
 
 // 服务端直接获取数据
 const onLoad = async () => {
-  const { data } = await useFetch<any>(
-    'http://interview-api-t.itheima.net/h5/interview/query',
-    {
-      params,
-      headers: {
-        // 注意 Bearer 和 后面的空格不能删除，为后台的token辨识
-        Authorization: `Bearer ${getToken()}`,
-      },
-    },
-  )
+  // 获取数据
+  const { data } = await useRequest<any>('/interview/query', { params })
   // 数组追加
   list.value.push(...data.value.data.rows)
+  // 更新加载中标识
   loading.value = false
+  // 页面累加
   params.current++
+  // 如果当前页码大于总页数，说明已加载完所有数据
   if (params.current > data.value.data.pageTotal) {
     finished.value = true
   }
 }
 
+// 页面加载时自动加载数据
 onLoad()
 </script>
 
@@ -43,7 +41,7 @@ onLoad()
         <div class="logo"><img src="~/assets/logo.png" alt="" /></div>
       </nav>
       <van-list
-        v-model="loading"
+        v-model:loading="loading"
         :finished="finished"
         finished-text="没有更多了"
         @load="onLoad"

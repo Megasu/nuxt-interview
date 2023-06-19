@@ -10,11 +10,7 @@ const form = reactive({
 // 点击提交
 const onSubmit = async () => {
   // 加载提示
-  showLoadingToast({
-    message: '拼命加载中...',
-    forbidClick: true,
-  })
-
+  showLoadingToast({ message: '拼命加载中...', forbidClick: true })
   await registerAPI(form)
   showSuccessToast('注册成功')
   navigateTo('/login')

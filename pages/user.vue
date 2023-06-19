@@ -1,22 +1,19 @@
 <script setup lang="ts">
-const username = ref()
-const avatar = ref()
+// 获取数据
+const { data } = await useRequest<any>('/user/currentUser')
 
-const { data } = await useFetch<any>(
-  'http://interview-api-t.itheima.net/h5/user/currentUser',
-  {
-    headers: {
-      // 注意 Bearer 和 后面的空格不能删除，为后台的token辨识
-      Authorization: `Bearer ${getToken()}`,
-    },
-  },
-)
+// 映射数据
+const { username, avatar } = toRefs(data.value.data)
 
-username.value = data.value.data.username
-avatar.value = data.value.data.avatar
-
-const logout = () => {
+// 退出登录
+const logout = async () => {
+  // 二次确认
+  await showConfirmDialog({ message: '是否退出登录？' })
+  // 删除 token
   delToken()
+  // 弹窗提示
+  showToast('退出成功')
+  // 跳转页面
   navigateTo('/login')
 }
 </script>

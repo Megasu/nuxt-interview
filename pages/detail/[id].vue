@@ -1,21 +1,11 @@
 <script setup lang="ts">
-const token = getToken()
-
-const { data } = await useFetch<any>(
-  'http://interview-api-t.itheima.net/h5/interview/show',
-  {
-    params: {
-      id: useRoute().params.id,
-    },
-    headers: {
-      // 注意 Bearer 和 后面的空格不能删除，为后台的token辨识
-      Authorization: `Bearer ${token}`,
-    },
+const { data } = await useRequest<any>('/interview/show', {
+  params: {
+    id: useRoute().params.id,
   },
-)
+})
 
-const article = ref<any>()
-article.value = data.value.data
+const article = toRef(data.value.data)
 </script>
 
 <template>
