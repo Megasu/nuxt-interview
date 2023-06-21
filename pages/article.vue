@@ -1,10 +1,10 @@
 <script setup lang="ts">
 // 查询参数
-const params = {
+const params = reactive({
   current: 1, // 当前页码
   sorter: 'weight_desc', // 排序方式
   pageSize: 10, // 页容量
-}
+})
 
 // 文章列表
 const list = ref<any[]>([])
@@ -15,7 +15,10 @@ const finished = ref(false)
 // 服务端直接获取数据
 const onLoad = async () => {
   // 获取数据
-  const { data } = await useRequest<any>('/interview/query', { params })
+  const { data } = await useRequest<any>('/interview/query', {
+    // 如果是 reactive 会监听变化重新发送请求
+    params: { ...params },
+  })
   // 数组追加
   list.value.push(...data.value.data.rows)
   // 更新加载中标识
@@ -30,14 +33,37 @@ const onLoad = async () => {
 
 // 页面加载时自动加载数据
 onLoad()
+
+const changeSorter = (value: string) => {
+  params.sorter = value
+  // 重置所有条件
+  params.current = 1 // 排序条件变化，重新从第一页开始加载
+  list.value = []
+  finished.value = false // finished重置，重新有数据可以加载了
+  // 手动调用了加载更多，也需要手动将 loading 改成 true，表示正在加载中（避免重复触发）
+  loading.value = true
+  onLoad()
+}
 </script>
 
 <template>
   <NuxtLayout name="tabbar">
     <div class="article-page">
       <nav class="my-nav van-hairline--bottom">
-        <a href="javascript:;">推荐</a>
-        <a href="javascript:;">最新</a>
+        <a
+          @click="changeSorter('weight_desc')"
+          :class="{ active: params.sorter === 'weight_desc' }"
+          href="javascript:;"
+        >
+          推荐
+        </a>
+        <a
+          @click="changeSorter('')"
+          :class="{ active: params.sorter === '' }"
+          href="javascript:;"
+        >
+          最新
+        </a>
         <div class="logo"><img src="~/assets/logo.png" alt="" /></div>
       </nav>
       <van-list
