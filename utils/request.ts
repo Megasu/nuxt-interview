@@ -3,7 +3,7 @@ import axios from 'axios'
 
 // 创建一个新的axios实例
 const request = axios.create({
-  baseURL: 'http://interview-api-t.itheima.net/h5/',
+  baseURL: 'https://interview-api-t.itheima.net/h5/',
   timeout: 5000,
 })
 
