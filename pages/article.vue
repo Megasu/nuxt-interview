@@ -11,9 +11,16 @@ const list = ref<any[]>([])
 // 加载中标识、已完成标识
 const loading = ref(false)
 const finished = ref(false)
+const refreshing = ref(false)
 
 // 服务端直接获取数据
 const onLoad = async () => {
+  // 如果下拉刷新则重置数据
+  if (refreshing.value) {
+    list.value = []
+    params.current = 1
+    refreshing.value = false
+  }
   // 获取数据
   const { data } = await useRequest<any>('/interview/query', {
     // 如果是 reactive 会监听变化重新发送请求
@@ -33,6 +40,14 @@ const onLoad = async () => {
 
 // 页面加载时自动加载数据
 onLoad()
+
+const onRefresh = () => {
+  // 清空列表数据
+  finished.value = false
+  // 将 loading 设置为 true，表示处于加载状态
+  loading.value = true
+  onLoad()
+}
 
 const changeSorter = (value: string) => {
   params.sorter = value
@@ -66,15 +81,18 @@ const changeSorter = (value: string) => {
         </a>
         <div class="logo"><img src="~/assets/logo.png" alt="" /></div>
       </nav>
-      <van-list
-        v-model:loading="loading"
-        :finished="finished"
-        finished-text="没有更多了"
-        @load="onLoad"
-      >
-        <!-- 文章项组件 - 自动导入 -->
-        <ArticleItem v-for="item in list" :key="item.id" :item="item" />
-      </van-list>
+
+      <van-pull-refresh v-model="refreshing" @refresh="onRefresh">
+        <van-list
+          v-model:loading="loading"
+          :finished="finished"
+          finished-text="没有更多了"
+          @load="onLoad"
+        >
+          <!-- 文章项组件 - 自动导入 -->
+          <ArticleItem v-for="item in list" :key="item.id" :item="item" />
+        </van-list>
+      </van-pull-refresh>
     </div>
   </NuxtLayout>
 </template>
