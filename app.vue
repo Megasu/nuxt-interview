@@ -1,6 +1,6 @@
 <template>
   <!-- 路由占位 -->
-  <NuxtPage />
+  <NuxtPage :keepalive="{ max: 10 }" />
 </template>
 
 <style>
