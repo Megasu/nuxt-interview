@@ -33,6 +33,11 @@ const toggleCollect = async () => {
     showToast('取消收藏')
   }
 }
+
+// SEO 优化
+useSeoMeta({
+  title: article.value.stem + '- 黑马面经',
+})
 </script>
 
 <template>
