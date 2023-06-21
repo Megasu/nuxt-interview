@@ -1,11 +1,38 @@
 <script setup lang="ts">
+import { updateCollectAPI, updateLikeAPI } from '~/api/article'
+
+const id = useRoute().params.id as string
+// 获取文章详情
 const { data } = await useRequest<any>('/interview/show', {
-  params: {
-    id: useRoute().params.id,
-  },
+  params: { id },
 })
 
+// 提取文章数据
 const article = toRef(data.value.data)
+
+// 喜欢
+const toggleLike = async () => {
+  await updateLikeAPI(id)
+  article.value.likeFlag = !article.value.likeFlag
+  if (article.value.likeFlag) {
+    article.value.likeCount++
+    showSuccessToast('点赞成功')
+  } else {
+    article.value.likeCount--
+    showToast('取消点赞')
+  }
+}
+
+// 收藏
+const toggleCollect = async () => {
+  await updateCollectAPI(id)
+  article.value.collectFlag = !article.value.collectFlag
+  if (article.value.collectFlag) {
+    showSuccessToast('收藏成功')
+  } else {
+    showToast('取消收藏')
+  }
+}
 </script>
 
 <template>
@@ -29,8 +56,16 @@ const article = toRef(data.value.data)
     </header>
     <main class="body" v-html="article.content"></main>
     <div class="opt">
-      <van-icon :class="{ active: article.likeFlag }" name="like-o" />
-      <van-icon :class="{ active: article.collectFlag }" name="star-o" />
+      <van-icon
+        @click="toggleLike"
+        :class="{ active: article.likeFlag }"
+        name="like-o"
+      />
+      <van-icon
+        @click="toggleCollect"
+        :class="{ active: article.collectFlag }"
+        name="star-o"
+      />
     </div>
   </div>
 </template>
